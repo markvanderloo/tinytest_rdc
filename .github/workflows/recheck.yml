@@ -6,12 +6,12 @@ on:
 jobs:
   revdep_check:
     runs-on: ubuntu-latest
-    # We forceren de harde limiet van 6 uur, voor de zekerheid
+    # force the 6h limit
     timeout-minutes: 360 
     strategy:
       fail-fast: false
       matrix:
-        # We zetten 8 parallelle servers aan het werk
+        # 8 servers
         chunk: [1, 2, 3, 4, 5, 6, 7, 8]
 
     steps:
@@ -24,7 +24,7 @@ jobs:
       - name: Setup R
         uses: r-lib/actions/setup-r@v2
         with:
-          # Cruciaal: dit zorgt ervoor dat de 400 pakketten als binaries installeren (secondewerk)
+          # make sure packages are installed as binaries
           use-public-rspm: true 
 
       - name: Installeer Ubuntu systeem-afhankelijkheden
@@ -42,11 +42,11 @@ jobs:
         env:
           CHUNK_ID: ${{ matrix.chunk }}
         run: |
-          # 1. Haal live de nieuwste lijst met reverse dependencies op
+          # 1. Pick up list of dependencies
           deps <- tools::package_dependencies("tinytest", reverse = TRUE, which = "most")$tinytest
           deps <- sort(unique(deps))
           
-          # 2. Bepaal welk deel (chunk) deze specifieke server moet afhandelen
+          # 2. Check which chunk is handled by current server
           n_chunks <- 8
           chunk_id <- as.numeric(Sys.getenv("CHUNK_ID"))
           chunks <- split(deps, cut(seq_along(deps), n_chunks, labels = FALSE))
@@ -56,10 +56,10 @@ jobs:
           # initialise sqlite db
           revdepcheck::revdep_check(dependencies = character())
           
-          # 3. Vertel revdepcheck dat hij alléén deze specifieke chunk moet testen
+          # 3. Let revdep know what packages to check
           revdepcheck::revdep_add(packages = my_chunk)
           
-          # 4. Start de daadwerkelijke test (GitHub actions hebben 2 cores per stuk)
+          # 4. Start the check (gh servers have 2 cores each)
           revdepcheck::revdep_check(num_workers = 2)
         shell: Rscript {0}
 
@@ -67,7 +67,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          # Bewaar de resultaten van elke batch onder een eigen naam
+          # Save each result under it's own name
           name: revdep-results-batch-${{ matrix.chunk }}
           path: revdep/
 
