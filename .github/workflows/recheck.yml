@@ -4,19 +4,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  revdep_check:
-    runs-on: ubuntu-latest
+  # We definiëren eerst de matrix
+  setup_matrix:
     strategy:
       fail-fast: false
       matrix:
-        # We maken 8 parallelle werkers aan
         batch: [1, 2, 3, 4, 5, 6, 7, 8]
     
-    name: Batch ${{ matrix.batch }}
+    # Hier roepen we de externe recheck workflow aan
     uses: r-devel/recheck/.github/workflows/recheck.yml@v1
     with:
       which: 'most'
-      # Hier plak je de output van het R-script onder de juiste nummers
+      # Gebruik de logica om de juiste lijst te kiezen op basis van het batchnummer
       package: >-
         ${{ 
           matrix.batch == 1 && 'abclass, accumulate, aion, ALFAM2, alkahest, AMR, amt, ananke, anticlust, anytime, aphylo, AQEval, ArchaeoPhases, arkhe, arrg, astgrepr, automatedRecLin, autometric, backbone, banditpam, barrks, Bayesrel, BayesRep, BayesRepDesign, bdots, BEDMatrix, bfpwr, biglasso, biogas, blavaan, blocking, boostmath, bootGOF, bpvars, brar, brglm2, broadcast, bspm, bsvars, bsvarSIGNs, BVAR, BVARverse, canprot, cartography, carts, catalog, cdata, checkmate, chem16S, ChemoSpec' ||
@@ -28,4 +27,5 @@ jobs:
           matrix.batch == 7 && 'roundhouse, roxut, roxytest, RPhosFate, RProtoBuf, rqdatatable, RQuantLib, rquery, rspa, rspm, RTMB, runner, RWNN, scs, semnar, sergeant, settings, sgo, sigr, simPop, simputation, simTool, SimTOST, singleRcapture, slurmR, smetlite, soma, sparta, spatialreg, spdep, spectralR, spgwr, spiderbar, splines2, starsExtra, statebins, statgenGWAS, statgenHTP, statgenIBD, statgenMPP, statgenQTLxT, statlingua, StealLikeBayes, stringdist, subplex, subsampling, super, SurfRough, surveillance, SurvivalClusteringTree' ||
           'symDMatrix, synthesizer, tabula, tanaka, targeted, td, tdsa, terra, textutils, tiledb, tinycodet, tinylens, tinyplot, tinysnapshot, tinytable, tinytest2JUnit, toastui, topicmodels.etm, track2KBA, tractor.base, treePlotArea, treesitter.c, TruncatedNormal, tsdb, ttdo, twotrials, TwoWayFEWeights, uaparserjs, ulid, valh, validate, validatesuggest, vegperiod, vek, via, VIM, vip, visreg, vtreat, walkboutr, wand, webmap, whisper, wooldridge, wrapr, WVPlots, x12, xmlwriter, xts, ympes'
         }}
+
 
