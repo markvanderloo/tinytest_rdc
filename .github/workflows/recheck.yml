@@ -1,31 +1,67 @@
-name: Parallel Revdep Check (400 pkgs)
+name: Parallel Revdep Check (Custom)
 
 on:
   workflow_dispatch:
 
 jobs:
-  # We definiëren eerst de matrix
-  setup_matrix:
+  revdep_check:
+    runs-on: ubuntu-latest
+    # We forceren de harde limiet van 6 uur, voor de zekerheid
+    timeout-minutes: 360 
     strategy:
       fail-fast: false
       matrix:
-        batch: [1, 2, 3, 4, 5, 6, 7, 8]
-    
-    # Hier roepen we de externe recheck workflow aan
-    uses: r-devel/recheck/.github/workflows/recheck.yml@v1
-    with:
-      which: 'most'
-      # Gebruik de logica om de juiste lijst te kiezen op basis van het batchnummer
-      package: >-
-        ${{ 
-          matrix.batch == 1 && 'abclass, accumulate, aion, ALFAM2, alkahest, AMR, amt, ananke, anticlust, anytime, aphylo, AQEval, ArchaeoPhases, arkhe, arrg, astgrepr, automatedRecLin, autometric, backbone, banditpam, barrks, Bayesrel, BayesRep, BayesRepDesign, bdots, BEDMatrix, bfpwr, biglasso, biogas, blavaan, blocking, boostmath, bootGOF, bpvars, brar, brglm2, broadcast, bspm, bsvars, bsvarSIGNs, BVAR, BVARverse, canprot, cartography, carts, catalog, cdata, checkmate, chem16S, ChemoSpec' ||
-          matrix.batch == 2 && 'ChemoSpec2D, ChemoSpecUtils, CHNOSZ, chronometre, chronosphere, cit, clarabel, classInt, climetrics, clubpro, CoDaImpact, comat, comprehenr, crochet, cronR, ctrdata, datareportR, datetimeutils, dauphin, dbarts, dcmodify, deductive, defm, Delaporte, depower, detectseparation, dfidx, digest, dimensio, DisImpact, distanceto, diveMove, divest, doconv, docxtractr, douconca, DTSg, dtts, ecic, EnvStats, epidata, epitraxr, epiworldR, ergmito, ess, et.nwfva, etwfe, facmodTS, factor256, factReg' ||
-          matrix.batch == 3 && 'fastdid, fastshap, fastymd, faviconPlease, fisheye, flexiblas, fmcmc, fntl, formatdown, fritools, fritools2, funMoDisco, gbm, gdalcubes, gdm, geoarrowWidget, geojsonsf, geometries, gepaf, ggfixest, ggiraph, ggprism, ggspark, gimms, gower, gpkg, grattanInflators, GroupSeq, grpreg, gtfsio, gtrendsR, h3lib, h3r, hashr, havel, healthyAddress, highs, holiglm, howManyImputations, hutilscpp, icr, imaginarycss, imbibe, inlcolor, inline, inlpubs, inphr, install.load, interleave' ||
-          matrix.batch == 4 && 'intsurv, irg, ironseed, isatabr, isopleuros, jagsUI, jti, kairos, khroma, kinesis, kknn, ksm, lamW, languageserversetup, LearnPCA, linemap, LinkedMatrix, lintools, lmhelprs, LMMsolver, longevity, longurl, lumberjack, maditr, MakefileR, manymome.table, mapiso, maplegend, mapsf, maptiles, mapview, marginaleffects, maxLik, MBBEFDLite, merDeriv, mesonet, metaRange, mets, mev, micsr, midfieldr, miesmuschel, mig, minimaxApprox, mmand, modelbpp, modelsummary, mschart, nanotime, ncvreg' ||
-          matrix.batch == 5 && 'ndjson, neighbours, netplot, neverhpfilter, nexus, nloptr, NMOF, nngeo, nonprobsvy, od, ODataQuery, odyssey, OmicNavigator, opa, Orcs, ore, orgutils, osrm, owd, pack, packager, Pade, partialling.out, parttree, pcdid, pci, pdp, PerformanceAnalytics, phangorn, phosphoricons, phutil, phyloregion, piqp, pkgKitten, plmmr, PMwR, poorman, potential, ppRep, pqrfe, praznik, psychotree, qbinplots, QDiabetes, QR, quadprogXT, quantmod, QuickJSR, rankdifferencetest, rapr' ||
-          matrix.batch == 6 && 'rassta, raster, Rblpapi, rbranding, Rcpp, RcppAnnoy, RcppArmadillo, RcppArray, RcppBlaze, RcppCCTZ, RcppClassic, RcppDynProg, RcppEigen, RcppFastAD, RcppFastFloat, RcppGSL, RcppInt64, RcppMagicEnum, rcppmlpackexamples, RcppRedis, RcppSimdJson, RcppTOML, RcppUUID, Rdatasets, rdbnomics, Rduckhts, reda, reformulas, remify, remstats, remstimate, remulate, replacer, reportr, restatapi, RestRserve, revss, rformat, rgeedim, rgeomorphon, rgexf, rgph, rjsoncons, rlas, RMCC, RNifti, RNiftyReg, roger, ROI.plugin.highs' ||
-          matrix.batch == 7 && 'roundhouse, roxut, roxytest, RPhosFate, RProtoBuf, rqdatatable, RQuantLib, rquery, rspa, rspm, RTMB, runner, RWNN, scs, semnar, sergeant, settings, sgo, sigr, simPop, simputation, simTool, SimTOST, singleRcapture, slurmR, smetlite, soma, sparta, spatialreg, spdep, spectralR, spgwr, spiderbar, splines2, starsExtra, statebins, statgenGWAS, statgenHTP, statgenIBD, statgenMPP, statgenQTLxT, statlingua, StealLikeBayes, stringdist, subplex, subsampling, super, SurfRough, surveillance, SurvivalClusteringTree' ||
-          'symDMatrix, synthesizer, tabula, tanaka, targeted, td, tdsa, terra, textutils, tiledb, tinycodet, tinylens, tinyplot, tinysnapshot, tinytable, tinytest2JUnit, toastui, topicmodels.etm, track2KBA, tractor.base, treePlotArea, treesitter.c, TruncatedNormal, tsdb, ttdo, twotrials, TwoWayFEWeights, uaparserjs, ulid, valh, validate, validatesuggest, vegperiod, vek, via, VIM, vip, visreg, vtreat, walkboutr, wand, webmap, whisper, wooldridge, wrapr, WVPlots, x12, xmlwriter, xts, ympes'
-        }}
+        # We zetten 8 parallelle servers aan het werk
+        chunk: [1, 2, 3, 4, 5, 6, 7, 8]
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pandoc (nodig voor vignettes)
+        uses: r-lib/actions/setup-pandoc@v2
+
+      - name: Setup R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          # Cruciaal: dit zorgt ervoor dat de 400 pakketten als binaries installeren (secondewerk)
+          use-public-rspm: true 
+
+      - name: Install pak & revdepcheck
+        run: |
+          install.packages("pak", repos = "https://cran.rstudio.com/")
+          pak::pkg_install("r-lib/revdepcheck")
+        shell: Rscript {0}
+
+      - name: Run revdepcheck (Batch ${{ matrix.chunk }})
+        env:
+          CHUNK_ID: ${{ matrix.chunk }}
+        run: |
+          # 1. Haal live de nieuwste lijst met reverse dependencies op
+          deps <- tools::package_dependencies("tinytest", reverse = TRUE, which = "most")$tinytest
+          deps <- sort(unique(deps))
+          
+          # 2. Bepaal welk deel (chunk) deze specifieke server moet afhandelen
+          n_chunks <- 8
+          chunk_id <- as.numeric(Sys.getenv("CHUNK_ID"))
+          chunks <- split(deps, cut(seq_along(deps), n_chunks, labels = FALSE))
+          my_chunk <- chunks[[as.character(chunk_id)]]
+          
+          message("Start check voor batch ", chunk_id, " (", length(my_chunk), " pakketten)")
+          
+          # 3. Vertel revdepcheck dat hij alléén deze specifieke chunk moet testen
+          revdepcheck::revdep_reset()
+          revdepcheck::revdep_add(packages = my_chunk)
+          
+          # 4. Start de daadwerkelijke test (GitHub actions hebben 2 cores per stuk)
+          revdepcheck::revdep_check(num_workers = 2)
+        shell: Rscript {0}
+
+      - name: Upload resultaten
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          # Bewaar de resultaten van elke batch onder een eigen naam
+          name: revdep-results-batch-${{ matrix.chunk }}
+          path: revdep/
 
