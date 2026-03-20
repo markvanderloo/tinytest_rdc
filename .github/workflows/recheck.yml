@@ -27,6 +27,11 @@ jobs:
           # Cruciaal: dit zorgt ervoor dat de 400 pakketten als binaries installeren (secondewerk)
           use-public-rspm: true 
 
+      - name: Installeer Ubuntu systeem-afhankelijkheden
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libharfbuzz-dev libfribidi-dev
+
       - name: Install pak & revdepcheck
         run: |
           install.packages("pak", repos = "https://cran.rstudio.com/")
