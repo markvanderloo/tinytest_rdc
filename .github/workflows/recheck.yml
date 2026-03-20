@@ -53,8 +53,11 @@ jobs:
           my_chunk <- chunks[[as.character(chunk_id)]]
           
           message("Start check voor batch ", chunk_id, " (", length(my_chunk), " pakketten)")
+
           
           # 3. Vertel revdepcheck dat hij alléén deze specifieke chunk moet testen
+          dir.create("revdep", showWarnings = FALSE)
+          revdepcheck:::db_setup(".")
           revdepcheck::revdep_reset()
           revdepcheck::revdep_add(packages = my_chunk)
           
