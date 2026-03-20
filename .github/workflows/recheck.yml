@@ -53,12 +53,10 @@ jobs:
           my_chunk <- chunks[[as.character(chunk_id)]]
           
           message("Start check voor batch ", chunk_id, " (", length(my_chunk), " pakketten)")
-
+          # initialise sqlite db
+          revdepcheck::revdep_check(dependencies = character())
           
           # 3. Vertel revdepcheck dat hij alléén deze specifieke chunk moet testen
-          dir.create("revdep", showWarnings = FALSE)
-          revdepcheck:::db_setup(".")
-          revdepcheck::revdep_reset()
           revdepcheck::revdep_add(packages = my_chunk)
           
           # 4. Start de daadwerkelijke test (GitHub actions hebben 2 cores per stuk)
