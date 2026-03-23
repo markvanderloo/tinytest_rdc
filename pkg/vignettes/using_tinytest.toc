@@ -1,0 +1,26 @@
+\contentsline {section}{\numberline {1}Purpose of this package: unit testing}{3}{section.1}%
+\contentsline {section}{\numberline {2}Expressing tests}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Test functions}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Alternative syntax}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Interpreting the output and print options}{4}{subsection.2.3}%
+\contentsline {section}{\numberline {3}Test files}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Summarizing test results, getting the data}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Programming over tests, ignoring test results, exiting early}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Running order and side effects}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Monitoring side effects}{8}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Testing packages}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Build--install--test interactively}{10}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Testing functions that are not exported: use `:::`}{10}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Using data stored in files}{10}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Skipping tests on \texttt {CRAN}}{11}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Testing your package after installation}{11}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Using extension packages}{11}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}Mocking databases}{12}{subsection.4.7}%
+\contentsline {section}{\numberline {5}Testing with environmental variables}{12}{section.5}%
+\contentsline {section}{\numberline {6}Running tests in parallel}{12}{section.6}%
+\contentsline {section}{\numberline {7}A few tips on packages and unit testing}{13}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Make your package spherical}{13}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}Test the surface, not the volume}{14}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}How many tests do I need?}{14}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}It's not a bug, it's a test!}{15}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}Side effects are the Devil}{15}{subsection.7.5}%
